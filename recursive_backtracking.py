@@ -40,4 +40,4 @@ if __name__ == '__main__':
     recursive_backtracker(my_grid)
     my_grid.color_grid('red')
     print(len(my_grid.get_dead_ends()))
-    my_grid.draw_maze()
+    my_grid.draw_maze(True, "recursive-backtracking-maze-{0}-{1}.png")

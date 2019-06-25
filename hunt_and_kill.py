@@ -45,4 +45,4 @@ if __name__ == '__main__':
     hunt_and_kill(my_grid)
     my_grid.color_grid('green')
     print(len(my_grid.get_dead_ends()))
-    my_grid.draw_maze()
+    my_grid.draw_maze(True, "hunt-and-kill-maze-{0}-{1}.png")
