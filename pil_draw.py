@@ -13,14 +13,13 @@ a_destination = 'maze_images'
 class PilGrid(Grid):
     def __init__(self, columns, rows, origin=1):
         super().__init__(columns, rows, origin)
-        self.width = 800
-        self.height = 800
-        self.image = Image.new("RGB", (self.width, self.height), "white")
+        self.cell_width = 20
         self.inset = 50
-        self.cell_width = self.calculate_cell_width()
-        self.cell_height = self.calculate_cell_height()
+        self.width, self.height = ((self.rows * self.cell_width) + self.inset,
+                                   (self.columns * self.cell_width) + self.inset)
+        self.image = Image.new("RGB", (self.width, self.height), "white")
         self.rect_width = self.rows * self.cell_width
-        self.rect_height = self.columns * self.cell_height
+        self.rect_height = self.columns * self.cell_width
         self.draw = ImageDraw.Draw(self.image)
         self.pixel_ranges = self.get_pixel_ranges()
         self.default_end = self.rows * self.columns
@@ -28,7 +27,7 @@ class PilGrid(Grid):
     def calculate_cell_width(self):
         return (self.width - self.inset)//self.rows
 
-    def calculate_cell_height(self):
+    def calculate_cell_width(self):
         return (self.height - self.inset)//self.columns
 
     def draw_cell(self, x_coord: int, y_coord: int, walls: str):
@@ -36,19 +35,19 @@ class PilGrid(Grid):
             for wall in walls:
                 if wall == 'L':
                     start = (x_coord, y_coord)
-                    stop = (x_coord, y_coord + self.cell_height)
+                    stop = (x_coord, y_coord + self.cell_width)
                     self.draw.line((start, stop), width=1, fill="black")
                 elif wall == 'R':
                     start = (x_coord + self.cell_width, y_coord)
-                    stop = (x_coord + self.cell_width, y_coord + self.cell_height)
+                    stop = (x_coord + self.cell_width, y_coord + self.cell_width)
                     self.draw.line((start, stop), width=1, fill="black")
                 elif wall == 'U':
                     start = (x_coord, y_coord)
                     stop = (x_coord + self.cell_width, y_coord)
                     self.draw.line((start, stop), width=1, fill="black")
                 else:
-                    start = (x_coord, y_coord + self.cell_height)
-                    stop = (x_coord + self.cell_width, y_coord + self.cell_height)
+                    start = (x_coord, y_coord + self.cell_width)
+                    stop = (x_coord + self.cell_width, y_coord + self.cell_width)
                     self.draw.line((start, stop), width=1, fill="black")
         return
 
@@ -62,7 +61,7 @@ class PilGrid(Grid):
                 self.draw_cell(x_coord, y_coord, wall)
                 x_coord += self.cell_width
             x_coord = displacement
-            y_coord += self.cell_height
+            y_coord += self.cell_width
         self.draw.rectangle([(displacement, displacement), (self.rect_width+displacement,
                                                             self.rect_height+displacement)],
                             outline="black")
@@ -93,11 +92,11 @@ class PilGrid(Grid):
                 lower_x = starting_x
                 upper_x = (starting_x + self.cell_width)
                 lower_y = starting_y
-                upper_y = (starting_y + self.cell_height)
+                upper_y = (starting_y + self.cell_width)
                 pixel_ranges[r] = [(lower_x, upper_x), (lower_y, upper_y)]
                 starting_x += self.cell_width
             starting_x = displacement
-            starting_y += self.cell_height
+            starting_y += self.cell_width
         return pixel_ranges
 
     def color_cell(self, cell, base_color=(150, 0, 0)):
@@ -106,7 +105,15 @@ class PilGrid(Grid):
         y_range = self.pixel_ranges[cell][1]
         for x in range(x_range[0], x_range[1] + 1):
             for y in range(y_range[0], y_range[1] + 1):
-                pix_obj[x, y] = base_color
+                try:
+                    pix_obj[x, y] = base_color
+                    #  pix_obj.putpixel((x, y), base_color)
+                except IndexError:
+                    print(x, y)
+                    print(cell.row, cell.column)
+                    print(self.width, self.height)
+                    print(self.image.size)
+                    raise IndexError
         del pix_obj
         return
 
