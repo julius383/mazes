@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from Grid import *
 import time
 import random
@@ -41,8 +40,8 @@ def hunt_and_kill(grid_object: Grid):
 
 
 if __name__ == '__main__':
-    my_grid = PilGrid(100, 100)
+    my_grid = PilGrid(50, 50)
     hunt_and_kill(my_grid)
     my_grid.color_grid('green')
     print(len(my_grid.get_dead_ends()))
-    my_grid.draw_maze(True, "hunt-and-kill-maze-{0}-{1}.png")
+    my_grid.draw_maze()

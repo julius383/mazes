@@ -2,7 +2,13 @@ from Grid import Grid
 from PIL import Image, ImageDraw
 import os
 
+
+# im = Image.new("RGB", (512, 512), "white")
+# pix = im.load()
+# print(pix[30, 30])
+# im.show()
 a_destination = 'maze_images'
+
 
 class PilGrid(Grid):
     def __init__(self, columns, rows, origin=1):
@@ -12,14 +18,18 @@ class PilGrid(Grid):
         self.image = Image.new("RGB", (self.width, self.height), "white")
         self.inset = 50
         self.cell_width = self.calculate_cell_width()
+        self.cell_height = self.calculate_cell_width()
         self.rect_width = self.rows * self.cell_width
-        self.rect_height = self.columns * self.cell_width
+        self.rect_height = self.columns * self.cell_height
         self.draw = ImageDraw.Draw(self.image)
         self.pixel_ranges = self.get_pixel_ranges()
         self.default_end = self.rows * self.columns
 
     def calculate_cell_width(self):
         return (self.width - self.inset)//self.rows
+
+    def calculate_cell_width(self):
+        return (self.height - self.inset)//self.columns
 
     def draw_cell(self, x_coord: int, y_coord: int, walls: str):
         if len(walls) > 0:
@@ -42,7 +52,7 @@ class PilGrid(Grid):
                     self.draw.line((start, stop), width=1, fill="black")
         return
 
-    def draw_maze(self, save=True, fstring="maze-{0}-{1}.png"):
+    def draw_maze(self, save=True):
         displacement = self.inset//2
         x_coord, y_coord = displacement, displacement
         grid = self.grid
@@ -53,9 +63,8 @@ class PilGrid(Grid):
                 x_coord += self.cell_width
             x_coord = displacement
             y_coord += self.cell_width
-        self.draw.rectangle(
-                [(displacement, displacement),
-                    (self.rect_width+displacement, self.rect_height+displacement)],
+        self.draw.rectangle([(displacement, displacement), (self.rect_width+displacement,
+                                                            self.rect_height+displacement)],
                             outline="black")
         self.image.show()
         if save:
@@ -70,7 +79,7 @@ class PilGrid(Grid):
                 if os.path.isfile(os.path.join(path, i)):
                     count += 1
             my_format = str(self.rows) + 'x' + str(self.columns)
-            fpath = os.path.join(path, fstring.format(count, my_format))
+            fpath = os.path.join(path, 'maze-{0}-{1}.png'.format(count, my_format))
             self.image.save(fpath)
         return
 

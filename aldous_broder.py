@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 from Grid import *
 import time
 import random
@@ -12,6 +12,7 @@ def aldous_broder(grid_object: Grid):
     unvisited_cells = grid_object.all_cells()
     while unvisited_cells:
         neighbours = current_cell.neighbours
+        random.shuffle(neighbours)
         next_cell = random.choice(neighbours)
         if next_cell in unvisited_cells:
             current_cell.carve_passage(next_cell)
@@ -30,5 +31,4 @@ if __name__ == '__main__':
     my_grid = PilGrid(50, 50)
     aldous_broder(my_grid)
     my_grid.color_grid('blue')
-    print(len(my_grid.get_dead_ends()))
-    my_grid.draw_maze(True, "aldous-broder-maze-{0}-{1}.png")
+    my_grid.draw_maze()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import pprint
-from matplotlib import pyplot as plt
+#  from matplotlib import pyplot as plt
 import random
 import pickle
 import os
@@ -43,6 +43,7 @@ class Grid:
     # this is used to create the maze structure later
     def make_grid(self):
         grid = []
+        # items = list(range(1, (self.rows * self.columns) + 1))
         index = 0
         for k in range(self.columns):
             row = []

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from Grid import *
 import random
 import time
@@ -41,5 +40,5 @@ def binary_tree(grid_object: Grid, bias='NW'):
 if __name__ == '__main__':
     my_grid = PilGrid(50, 50)
     binary_tree(my_grid, 'SE')
-    my_grid.color_grid('green')
-    my_grid.draw_maze(True, "binary-tree-maze-{0}-{1}.png")
+    my_grid.color_grid('red')
+    my_grid.draw_maze()

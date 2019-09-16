@@ -1,11 +1,10 @@
-#!/usr/bin/env python3
 from Grid import *
 import random
 import time
 from pil_draw import PilGrid
 
 
-def wilsons(grid_object):
+def wilsons(grid_object: Grid):
     start_time = time.time()
     visited = []
     unvisited = grid_object.all_cells()
@@ -52,6 +51,6 @@ def wilsons(grid_object):
 if __name__ == '__main__':
     my_grid = PilGrid(50, 50)
     wilsons(my_grid)
-    my_grid.color_grid('red')
+    my_grid.color_grid()
     print(len(my_grid.get_dead_ends()))
-    my_grid.draw_maze(True, "wilson-maze-{0}-{1}.png")
+    my_grid.draw_maze()
