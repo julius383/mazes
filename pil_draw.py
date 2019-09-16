@@ -18,7 +18,7 @@ class PilGrid(Grid):
         self.image = Image.new("RGB", (self.width, self.height), "white")
         self.inset = 50
         self.cell_width = self.calculate_cell_width()
-        self.cell_height = self.calculate_cell_width()
+        self.cell_height = self.calculate_cell_height()
         self.rect_width = self.rows * self.cell_width
         self.rect_height = self.columns * self.cell_height
         self.draw = ImageDraw.Draw(self.image)
@@ -28,7 +28,7 @@ class PilGrid(Grid):
     def calculate_cell_width(self):
         return (self.width - self.inset)//self.rows
 
-    def calculate_cell_width(self):
+    def calculate_cell_height(self):
         return (self.height - self.inset)//self.columns
 
     def draw_cell(self, x_coord: int, y_coord: int, walls: str):
@@ -36,19 +36,19 @@ class PilGrid(Grid):
             for wall in walls:
                 if wall == 'L':
                     start = (x_coord, y_coord)
-                    stop = (x_coord, y_coord + self.cell_width)
+                    stop = (x_coord, y_coord + self.cell_height)
                     self.draw.line((start, stop), width=1, fill="black")
                 elif wall == 'R':
                     start = (x_coord + self.cell_width, y_coord)
-                    stop = (x_coord + self.cell_width, y_coord + self.cell_width)
+                    stop = (x_coord + self.cell_width, y_coord + self.cell_height)
                     self.draw.line((start, stop), width=1, fill="black")
                 elif wall == 'U':
                     start = (x_coord, y_coord)
                     stop = (x_coord + self.cell_width, y_coord)
                     self.draw.line((start, stop), width=1, fill="black")
                 else:
-                    start = (x_coord, y_coord + self.cell_width)
-                    stop = (x_coord + self.cell_width, y_coord + self.cell_width)
+                    start = (x_coord, y_coord + self.cell_height)
+                    stop = (x_coord + self.cell_width, y_coord + self.cell_height)
                     self.draw.line((start, stop), width=1, fill="black")
         return
 
@@ -62,7 +62,7 @@ class PilGrid(Grid):
                 self.draw_cell(x_coord, y_coord, wall)
                 x_coord += self.cell_width
             x_coord = displacement
-            y_coord += self.cell_width
+            y_coord += self.cell_height
         self.draw.rectangle([(displacement, displacement), (self.rect_width+displacement,
                                                             self.rect_height+displacement)],
                             outline="black")
@@ -93,11 +93,11 @@ class PilGrid(Grid):
                 lower_x = starting_x
                 upper_x = (starting_x + self.cell_width)
                 lower_y = starting_y
-                upper_y = (starting_y + self.cell_width)
+                upper_y = (starting_y + self.cell_height)
                 pixel_ranges[r] = [(lower_x, upper_x), (lower_y, upper_y)]
                 starting_x += self.cell_width
             starting_x = displacement
-            starting_y += self.cell_width
+            starting_y += self.cell_height
         return pixel_ranges
 
     def color_cell(self, cell, base_color=(150, 0, 0)):
